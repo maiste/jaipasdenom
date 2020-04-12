@@ -8,5 +8,5 @@ const config = require('./config');
 
 const server = http.createServer(app);
 
-console.log("Server is listining on " + config.port);
+console.log("Server is listening on " + config.port);
 server.listen(config.port);
