@@ -1,0 +1,107 @@
+/**
+ * Render a deck
+ */
+
+let selected = new Set();
+
+function click_card() {
+    let card = "";
+    let c = this.children;
+    
+    for(let i = 0 ; i < c.length ; i++) {
+        if(c[i].className == "value") {
+            card += c[i].innerHTML;
+        } else {
+            card += c[i].className;
+        }
+    }
+
+    if (selected.has(card)) {
+        selected.delete(card);
+        this.className = "card";
+    } else {
+        selected.add(card);
+        this.className = "card selected";
+    }
+    console.log(selected);
+};
+
+function renderHand(hand) {
+    document.getElementById("deck").innerHTML = "";
+    hand.sort();
+    hand.forEach(card => {
+        let card_div = document.createElement("div");
+        let color_div = document.createElement("div");
+        let value_div = document.createElement("div");
+        let img = document.createElement("img");
+
+        img.src = "public/images/" + card[1] + ".png";
+        card_div.className = "card";
+        color_div.className = card[1];
+        color_div.appendChild(img);
+        
+
+        value_div.className = "value";
+        value_div.innerHTML = card[0];
+        card_div.appendChild(value_div);
+        card_div.appendChild(color_div);
+        card_div.onclick = click_card;
+
+        document.getElementById("deck").appendChild(card_div);
+    });
+}
+
+
+function renderChallengers(ennemies) {
+    document.getElementById("challengers").innerHTML = "";
+    ennemies.forEach(ennemy =>{
+        let pseudo = ennemy[0];
+        let nb_card = ennemy[1];
+
+        let challenger_div = document.createElement("div");
+        let back_div = document.createElement("div");
+        let back_content_div = document.createElement("p");
+        let name_div = document.createElement("div");
+        
+        challenger_div.className = "challenger";
+        back_div.className = "back";
+        name_div.className = "name";
+
+        name_div.innerHTML = pseudo;
+        back_content_div.innerHTML = nb_card;
+        back_div.appendChild(back_content_div);
+
+        challenger_div.appendChild(name_div);
+        challenger_div.appendChild(back_div);
+
+        document.getElementById("challengers").appendChild(challenger_div);
+    });
+}
+
+function renderMiddle(middle) {
+    document.getElementById("middle").innerHTML = "";
+    middle.forEach(card => {
+        let card_div = document.createElement("div");
+        let color_div = document.createElement("div");
+        let value_div = document.createElement("div");
+        let img = document.createElement("img");
+
+        img.src = "public/images/" + card[1] + ".png";
+        card_div.className = "card";
+        color_div.className = card[1];
+        color_div.appendChild(img);
+        
+
+        value_div.className = "value";
+        value_div.innerHTML = card[0];
+        card_div.appendChild(value_div);
+        card_div.appendChild(color_div);
+        document.getElementById("middle").appendChild(card_div);
+    });
+}
+
+function renderGame(challengers, middle, hand) {
+    renderChallengers(challengers);
+    renderMiddle(middle);
+    renderHand(hand);
+}
