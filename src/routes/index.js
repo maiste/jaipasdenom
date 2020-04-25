@@ -2,8 +2,10 @@
  * Main routes
  */
 
-function home (req, res) {
+exports.home = (req, res) => {
     res.render("pages/home");
 }
 
-exports.home = home;
+exports.game = (req, res) => {
+    res.render("pages/game");
+}
