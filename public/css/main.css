@@ -11,8 +11,19 @@ html, body {
 body {
     background-color: rgb(80, 114, 80);
     display: flex;
+}
+
+#historic {
+    width: 10%;
+    height: 100%;
+}
+
+#game {
+    width: 90%;
+    height: 100%;
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 
