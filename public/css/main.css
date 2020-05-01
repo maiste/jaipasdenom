@@ -29,7 +29,6 @@ body {
 
 /** === CARDS === **/
 #deck {
-    align-self: flex-end;
     border-radius: 5px;
     width: 80%;
     height: 35%;
@@ -38,12 +37,9 @@ body {
     margin-bottom: 0.5%;
     overflow-x: auto;
     display: flex;
+    justify-content: space-between;
 }
 
-#deck::-webkit-scrollbar {
-    display: none;
-  }
-  
 
 .card {
     display: flex;
@@ -68,7 +64,7 @@ body {
     font-size:15pt;
     text-align: center;
     width: 100%;
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 .selected {
