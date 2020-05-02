@@ -1,0 +1,143 @@
+/*
+ * Main css file
+ */
+
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background-color: rgb(80, 114, 80);
+    display: flex;
+}
+
+#historic {
+    width: 10%;
+    height: 100%;
+}
+
+#game {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+
+/** === CARDS === **/
+#deck {
+    border-radius: 5px;
+    width: 80%;
+    height: 35%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 0.5%;
+    overflow-x: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: #fff;
+    min-width: 150px;
+    max-width: 12%;
+    padding-top: 2%;
+    margin-bottom: 2%;
+    border-radius: 25px;
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#deck .card {
+    margin-right: -5px;
+}
+
+.value{
+    font-size:15pt;
+    text-align: center;
+    width: 100%;
+  font-family: sans-serif;
+}
+
+.selected {
+    background-color: #c9f5f5;
+}
+
+.d, .c, .h, .s {
+    display: flex;
+    justify-content: center;
+}
+
+.d img, .c img, .h img, .s img {
+    width: 60%;
+}
+
+
+
+/** === CHALLENGERS === **/
+
+#challengers {
+    height: 25%;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 1%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.challenger {
+    min-width: 10%;
+}
+
+.challenger .name {
+    width: 100%;
+    min-width: 10%;
+    font-size: 15pt;
+    font-family: sans-serif;
+    text-align: center;
+    color: rgb(252, 247, 228);
+    margin-bottom: 1%;
+}
+
+.challenger .back {
+    width: 100%;
+    min-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 25px;
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    background-color: #288383;
+    color: cornsilk;
+    font-size: 30pt;
+    font-family: rgb(252, 247, 228);
+}
+
+/** MIDDLE **/
+#middle {
+    height: 25%;
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    overflow-x: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#middle .card {
+    margin-right: 10px;
+}
