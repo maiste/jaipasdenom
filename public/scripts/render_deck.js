@@ -100,8 +100,32 @@ function renderMiddle(middle) {
     });
 }
 
-function renderGame(challengers, middle, hand) {
+function renderHistoric(historic) {
+    document.getElementById("historic").innerHTML = "";
+    let table = document.createElement("table");
+    let table_body = document.createElement("tbody");
+
+    historic.forEach(turn => {
+        let tr = document.createElement('tr');
+        let td = document.createElement('td');
+
+        let acc = turn[0] + ": ";
+        turn[1].forEach(card => {
+            acc += card + " ";
+        });
+        td.appendChild(document.createTextNode(acc));
+
+        tr.appendChild(td);
+        table_body.appendChild(tr);
+    });
+
+    table.appendChild(table_body);
+    document.getElementById("historic").appendChild(table);
+}
+
+function renderGame(challengers, middle, hand, historic) {
     renderChallengers(challengers);
     renderMiddle(middle);
     renderHand(hand);
+    renderHistoric(historic);
 }
