@@ -43,7 +43,7 @@ function renderLink(link) {
     
     let copy = document.createElement("button");
     copy.id = "copy";
-    copy.innerHTML = "Copy";
+    copy.innerHTML = "Copy the link";
     
     document.getElementById("shareLink").appendChild(link_div);
     document.getElementById("shareLink").appendChild(copy);
@@ -59,7 +59,21 @@ function renderLink(link) {
 
 }
 
- function renderLobby(players, link) {
+function renderStart(players, link) {
+    document.getElementById("startGame").innerHTML = "";
+    let start = document.createElement("button");
+    start.id = "start";
+    start.innerHTML = "Start the game";
+
+    document.getElementById("startGame").appendChild(start);
+
+    document.querySelector('#game').addEventListener("click", function (){
+        // TODO: Start the game
+    });
+}
+
+function renderLobby(players, link) {
     renderPlayers(players);
     renderLink(link);
+    renderStart(players, link);
 }
