@@ -4,8 +4,8 @@
 }
 
 ul{
-    overflow: hidden;
-    overflow-y: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 li {
