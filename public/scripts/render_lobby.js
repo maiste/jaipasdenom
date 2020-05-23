@@ -8,7 +8,6 @@ function createTitle(text, to) {
     title.id = "title";
     title.innerHTML = text;
     document.getElementById(to).appendChild(title);
-
 }
 function renderPlayers(players) {
     document.getElementById("players").innerHTML = "";
