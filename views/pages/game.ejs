@@ -12,8 +12,13 @@
     <script>
         let deck = ["Ac", "Js", "3d", "4c","Qs", "3s", "4d", "5d", "8h", "9s", "As", "4s","Qs", "3c", "4d"];
         challengers = [["Étienne", 10], ["Valentin", 3]];
-        miidle = ["Ac", "As"];
-        renderGame(challengers, miidle, deck);
+        middle = ["Ac", "As"];
+        historic = [
+          ["Étienne", ["Ac", "As"]],
+          ["Valentin", ["Kc", "Ks"]],
+          ["Étienne", ["4d", "4s"]]
+        ];
+        renderGame(challengers, middle, deck, historic);
     </script>
     </div>
   </body>
