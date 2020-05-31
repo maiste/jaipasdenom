@@ -66,7 +66,7 @@ function renderStart(players, link) {
 
     document.getElementById("startGame").appendChild(start);
 
-    document.querySelector('#game').addEventListener("click", function (){
+    document.querySelector('#start').addEventListener("click", function (){
         console.log('Game');
     });
 }
