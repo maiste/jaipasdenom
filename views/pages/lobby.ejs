@@ -10,6 +10,34 @@
             <div id="shareLink"></div>
             <div id="startGame"></div>
         </div>
+
+        <div id="prelobby">
+            <form id="pseudo">
+                <input type="text" value="Choose your pseudo!" id="pseudonyme"/>
+                <input type="submit" value="Submit!"/>
+            </form>
+            <script>
+                var form = document.getElementById('pseudo');
+                form.addEventListener('submit', function(e) {
+                    window.sessionStorage.pseudo = document.getElementById('pseudonyme').value;
+                    document.location.reload(true);
+                });
+            </script>
+        </div>
+
+        <script>
+            var form = document.getElementById('pseudo');
+            var lobby = document.getElementById('lobby');
+
+            if (!window.sessionStorage.pseudo) {
+                lobby.style.display = "none";
+                form.style.display = "block";
+            } else {
+                lobby.style.display = "block";
+                form.style.display = "none";
+            }
+        </script>
+
         <script>
             let players = ["Étienne", "Valentin"];
             let link = "foo.com";
