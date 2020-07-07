@@ -1,5 +1,6 @@
 const games = new Map();
 
+/* Server-side */
 
 function givePlayers(socket, uuid) {
     const game = games.get(uuid);
@@ -12,7 +13,19 @@ function givePlayers(socket, uuid) {
     }
 }
 
-/* Server-side */
+function joinPlayer(socket, uuid, pseudo) {
+    let game = games.get(uuid);
+    if (game) {
+        game.lobby_players.push(pseudo);
+
+        game.sockets.forEach(socket => {
+            givePlayers(socket, uuid);
+        });
+
+        game.sockets.push(socket);
+    }
+}
+
 exports.handleEvents = function (io) {
     io.on('connection', socket => {
         console.log('User connected');
@@ -25,11 +38,7 @@ exports.handleEvents = function (io) {
             const msgs = msg.split(';');
             const uuid = msgs[0];
             const pseudo = msgs[1];
-
-            let game = games.get(uuid);
-            if (game) {
-                game.lobby_players.push(pseudo);
-            }
+            joinPlayer(socket, uuid, pseudo);
         });
     });
 }
@@ -38,6 +47,7 @@ exports.handleJoin = function (uuid) {
     if (!games.has(uuid)) {
         let server_game = {
             lobby_players: [],
+            sockets: [],
             game: null
         };
 
