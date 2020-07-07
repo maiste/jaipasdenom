@@ -21,7 +21,10 @@
                 var form = document.getElementById('pseudo');
                 form.addEventListener('submit', function(e) {
                     window.sessionStorage.pseudo = document.getElementById('pseudonyme').value;
+                    e.preventDefault();
                     document.location.reload(true);
+
+                    // TODO: authorize only unique pseudonymes
                 });
             </script>
         </div>
@@ -45,6 +48,8 @@
             let players = [];
             const link = window.location.href;
             const pseudo = window.sessionStorage.pseudo;
+
+            // renderLobby(players, link);
             if (pseudo) {
                 const socket = io();
                 const elems = link.split('/');
