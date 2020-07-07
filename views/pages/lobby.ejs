@@ -38,9 +38,14 @@
             }
         </script>
 
+
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
         <script>
-            let players = ["Étienne", "Valentin"];
-            let link = "foo.com";
+            const players = [];
+            const link = window.location.href;
+            if (window.sessionStorage.pseudo) {
+                const socket = io();
+            }
             renderLobby(players, link);
         </script>
     </body>
