@@ -47,7 +47,11 @@
             const pseudo = window.sessionStorage.pseudo;
             if (pseudo) {
                 const socket = io();
-                fetchPlayers(socket, 'TODO');
+                const elems = link.split('/');
+                const uuid = elems[elems.length - 1];
+
+                joinLobby(socket, uuid, pseudo);
+                fetchPlayers(socket, uuid);
 
                 socket.on('players list', function(msg) {
                     players = msg.split(';');
