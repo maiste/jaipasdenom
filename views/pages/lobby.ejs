@@ -3,6 +3,7 @@
         <link rel="stylesheet" type="text/css" href="/public/css/lobby.css">
         <link rel="stylesheet" type="text/css" href="/public/css/main.css">
         <script type="text/javascript" src="/public/scripts/render_lobby.js"></script>
+        <script type="text/javascript" src="/public/scripts/client_lobby.js"></script>
     </head>
     <body>
         <div id="lobby">
@@ -41,12 +42,18 @@
 
         <script src="http://localhost:8080/socket.io/socket.io.js"></script>
         <script>
-            const players = [];
+            let players = [];
             const link = window.location.href;
-            if (window.sessionStorage.pseudo) {
+            const pseudo = window.sessionStorage.pseudo;
+            if (pseudo) {
                 const socket = io();
+                fetchPlayers(socket, 'TODO');
+
+                socket.on('players list', function(msg) {
+                    players = msg.split(';');
+                    renderLobby(players, link);
+                });
             }
-            renderLobby(players, link);
         </script>
     </body>
 </html>
