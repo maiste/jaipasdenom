@@ -6,6 +6,7 @@ function fetchPlayers(socket, uuid) {
 }
 
 function joinLobby(socket, uuid, pseudo) {
+    console.log("test");
     const msg = uuid + ';' + pseudo;
     socket.emit('join lobby', msg)
 }

@@ -6,23 +6,41 @@ function givePlayers(socket, uuid) {
     const game = games.get(uuid);
 
     if (game) {
-        const msg = game.lobby_players.join(';');
+        let players = []
+        game.lobby_players.forEach(player => {
+            players.push(player[0]);
+        });
+        const msg = players.join(';');
+
         socket.emit('players list', msg);
     } else {
         console.log(uuid + ' does not exist');
     }
 }
 
+function updateSocket(game, socket, pseudo) {
+    for (let i = 0; i < game.lobby_players.length; i++) {
+        if (game.lobby_players[i][0] === pseudo) {
+            game.lobby_players[i][1] = socket;
+            return true;
+        }
+    }
+    return false;
+}
+
 function joinPlayer(socket, uuid, pseudo) {
     let game = games.get(uuid);
-    if (game) {
-        game.lobby_players.push(pseudo);
+    if (game && !updateSocket(game, socket, pseudo)) {
+        game.lobby_players.push([pseudo, socket]);
 
-        game.sockets.forEach(socket => {
-            givePlayers(socket, uuid);
+        game.lobby_players.forEach(x => {
+            const pseudo_tmp = x[0];
+            const socket = x[1];
+
+            if (pseudo !== pseudo_tmp) {
+                givePlayers(socket, uuid);
+            }
         });
-
-        game.sockets.push(socket);
     }
 }
 
