@@ -6,7 +6,8 @@ function createLobby() {
         return (c=='x' ? r :(r&0x3|0x8)).toString(16);
     });
     
-    console.log(id);
+    window.sessionStorage.host = id;
+
     const url = window.location.href+ 'lobby/' + id;
     window.location.href = url;
     window.location.replace(url);

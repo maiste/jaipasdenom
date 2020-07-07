@@ -32,6 +32,7 @@
         <script>
             var form = document.getElementById('pseudo');
             var lobby = document.getElementById('lobby');
+            var start = document.getElementById('startGame');
 
             if (!window.sessionStorage.pseudo) {
                 lobby.style.display = "none";
@@ -40,6 +41,15 @@
                 lobby.style.display = "block";
                 form.style.display = "none";
             }
+
+            const elems = window.location.href.split('/');
+            const uuid = elems[elems.length - 1];
+            if (isHost(uuid)) {
+                start.style.display = "block";
+            } else {
+                start.style.display = "none";
+            }
+
         </script>
 
 
@@ -49,7 +59,6 @@
             const link = window.location.href;
             const pseudo = window.sessionStorage.pseudo;
 
-            // renderLobby(players, link);
             if (pseudo) {
                 const socket = io();
                 const elems = link.split('/');
@@ -60,7 +69,7 @@
 
                 socket.on('players list', function(msg) {
                     players = msg.split(';');
-                    renderLobby(players, link);
+                    renderLobby(players, link, isHost(uuid));
                 });
             }
         </script>

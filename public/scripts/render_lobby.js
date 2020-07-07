@@ -1,8 +1,6 @@
 /**
  * Render the pre-game lobby.
  */
-
-
 function createTitle(text, to) {
     let title = document.createElement("div");
     title.id = "title";
@@ -71,8 +69,10 @@ function renderStart(players, link) {
     });
 }
 
-function renderLobby(players, link) {
+function renderLobby(players, link, show_start) {
     renderPlayers(players);
     renderLink(link);
-    renderStart(players, link);
+    if (show_start) {
+        renderStart(players, link);
+    }
 }
