@@ -56,7 +56,7 @@ function renderLink(link) {
 
 }
 
-function renderStart(players, link) {
+function renderStart(players, link, startf) {
     document.getElementById("startGame").innerHTML = "";
     let start = document.createElement("button");
     start.id = "start";
@@ -64,15 +64,13 @@ function renderStart(players, link) {
 
     document.getElementById("startGame").appendChild(start);
 
-    document.querySelector('#start').addEventListener("click", function (){
-        console.log('Game');
-    });
+    document.querySelector('#start').addEventListener("click", startf);
 }
 
-function renderLobby(players, link, show_start) {
+function renderLobby(players, link, startf) {
     renderPlayers(players);
     renderLink(link);
-    if (show_start) {
-        renderStart(players, link);
+    if (startf) {
+        renderStart(players, link, startf);
     }
 }

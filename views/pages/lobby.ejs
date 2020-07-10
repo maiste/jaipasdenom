@@ -67,9 +67,16 @@
                 joinLobby(socket, uuid, pseudo);
                 fetchPlayers(socket, uuid);
 
+                let startf = null;
+                if (isHost(uuid)) {
+                    startf = () => {
+                        startGame(socket, uuid)
+                    };
+                }
+
                 socket.on('players list', function(msg) {
                     players = msg.split(';');
-                    renderLobby(players, link, isHost(uuid));
+                    renderLobby(players, link, startf);
                 });
             }
         </script>

@@ -6,7 +6,6 @@ function fetchPlayers(socket, uuid) {
 }
 
 function joinLobby(socket, uuid, pseudo) {
-    console.log("test");
     const msg = uuid + ';' + pseudo;
     socket.emit('join lobby', msg)
 }
@@ -17,4 +16,8 @@ function isHost(uuid) {
         return x === uuid;
     }
     return false;
+}
+
+function startGame(socket, uuid) {
+    socket.emit('start game', uuid);
 }
