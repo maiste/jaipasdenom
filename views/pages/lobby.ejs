@@ -1,8 +1,9 @@
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="public/css/lobby.css">
-        <link rel="stylesheet" type="text/css" href="public/css/main.css">
-        <script type="text/javascript" src="public/scripts/render_lobby.js"></script>
+        <link rel="stylesheet" type="text/css" href="/public/css/lobby.css">
+        <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+        <script type="text/javascript" src="/public/scripts/render_lobby.js"></script>
+        <script type="text/javascript" src="/public/scripts/client_lobby.js"></script>
     </head>
     <body>
         <div id="lobby">
@@ -10,10 +11,67 @@
             <div id="shareLink"></div>
             <div id="startGame"></div>
         </div>
+
+        <div id="prelobby">
+            <form id="pseudo">
+                <input type="text" value="Choose your pseudo!" id="pseudonyme"/>
+                <input type="submit" value="Submit!"/>
+            </form>
+            <script>
+                var form = document.getElementById('pseudo');
+                form.addEventListener('submit', function(e) {
+                    window.sessionStorage.pseudo = document.getElementById('pseudonyme').value;
+                    e.preventDefault();
+                    document.location.reload(true);
+
+                    // TODO: authorize only unique pseudonymes
+                });
+            </script>
+        </div>
+
         <script>
-            let players = ["Étienne", "Valentin"];
-            let link = "foo.com";
-            renderLobby(players, link);
+            var form = document.getElementById('pseudo');
+            var lobby = document.getElementById('lobby');
+            var start = document.getElementById('startGame');
+
+            if (!window.sessionStorage.pseudo) {
+                lobby.style.display = "none";
+                form.style.display = "block";
+            } else {
+                lobby.style.display = "block";
+                form.style.display = "none";
+            }
+
+            const elems = window.location.href.split('/');
+            const uuid = elems[elems.length - 1];
+            if (isHost(uuid)) {
+                start.style.display = "block";
+            } else {
+                start.style.display = "none";
+            }
+
+        </script>
+
+
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script>
+            let players = [];
+            const link = window.location.href;
+            const pseudo = window.sessionStorage.pseudo;
+
+            if (pseudo) {
+                const socket = io();
+                const elems = link.split('/');
+                const uuid = elems[elems.length - 1];
+
+                joinLobby(socket, uuid, pseudo);
+                fetchPlayers(socket, uuid);
+
+                socket.on('players list', function(msg) {
+                    players = msg.split(';');
+                    renderLobby(players, link, isHost(uuid));
+                });
+            }
         </script>
     </body>
 </html>
