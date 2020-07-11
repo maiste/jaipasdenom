@@ -1,8 +1,9 @@
+const config = require ('../config');
 const games = new Map();
 
 /* Server-side */
 
-function givePlayers(socket, uuid) {
+function givePlayers (socket, uuid) {
     const game = games.get(uuid);
 
     if (game) {
@@ -18,7 +19,7 @@ function givePlayers(socket, uuid) {
     }
 }
 
-function updateSocket(game, socket, pseudo) {
+function updateSocket (game, socket, pseudo) {
     for (let i = 0; i < game.lobby_players.length; i++) {
         if (game.lobby_players[i][0] === pseudo) {
             game.lobby_players[i][1] = socket;
@@ -28,7 +29,7 @@ function updateSocket(game, socket, pseudo) {
     return false;
 }
 
-function joinPlayer(socket, uuid, pseudo) {
+function joinPlayer (socket, uuid, pseudo) {
     let game = games.get(uuid);
     if (game && !updateSocket(game, socket, pseudo)) {
         game.lobby_players.push([pseudo, socket]);
@@ -40,6 +41,18 @@ function joinPlayer(socket, uuid, pseudo) {
             if (pseudo !== pseudo_tmp) {
                 givePlayers(socket, uuid);
             }
+        });
+    }
+}
+
+function startGame (uuid) {
+    let game = games.get(uuid);
+    if (game) {
+        game.lobby_players.forEach(x => {
+            const socket = x[1];
+
+            const url = config.url + 'game/' + uuid;
+            socket.emit('join game', url);
         });
     }
 }
@@ -57,6 +70,10 @@ exports.handleEvents = function (io) {
             const uuid = msgs[0];
             const pseudo = msgs[1];
             joinPlayer(socket, uuid, pseudo);
+        });
+
+        socket.on('start game', uuid => {
+            startGame(uuid);
         });
     });
 }

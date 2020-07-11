@@ -78,6 +78,11 @@
                     players = msg.split(';');
                     renderLobby(players, link, startf);
                 });
+
+                socket.on('join game', function (msg) {
+                    window.location.href = msg;
+                    window.location.replace(msg);
+                });
             }
         </script>
     </body>
