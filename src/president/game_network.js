@@ -81,12 +81,13 @@ function everyoneReady (game) {
     return true;
 }
 
-function readyGame (uuid, pseudo) {
+function readyGame (uuid, pseudo, socket) {
     let game = games.get(uuid);
     if (game) {
         for (let i = 0; i<game.lobby_players.length; i++) {
             if (game.lobby_players[i][0] === pseudo) {
                 game.lobby_players[i][2] = true;
+                game.lobby_players[i][1] = socket;
             }
         }
 
@@ -119,7 +120,7 @@ exports.handleEvents = function (io) {
         });
 
         socket.on('ready game', obj => {
-            readyGame(obj.uuid, obj.pseudo);
+            readyGame(obj.uuid, obj.pseudo, socket);
         });
     });
 }
