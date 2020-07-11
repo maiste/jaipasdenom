@@ -1,25 +1,26 @@
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="public/css/main.css">
-    <script type="text/javascript" src="public/scripts/render_deck.js"></script>
-  </head>
-  <body>
-    <div id="historic"></div>
-    <div id="game">
-    <div id="challengers"></div>
-    <div id="middle"></div>
-    <div id="deck"></div>
-    <script>
-        let deck = ["Ac", "Js", "3d", "4c","Qs", "3s", "4d", "5d", "8h", "9s", "As", "4s","Qs", "3c", "4d"];
-        challengers = [["Étienne", 10], ["Valentin", 3]];
-        middle = ["Ac", "As"];
-        historic = [
-          ["Étienne", ["Ac", "As"]],
-          ["Valentin", ["Kc", "Ks"]],
-          ["Étienne", ["4d", "4s"]]
-        ];
-        renderGame(challengers, middle, deck, historic);
-    </script>
-    </div>
-  </body>
+    <head>
+      <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+      <script type="text/javascript" src="/public/scripts/render_deck.js"></script>
+    </head>
+    <body>
+        <div id="historic"></div>
+        <div id="game">
+        <div id="challengers"></div>
+        <div id="middle"></div>
+        <div id="deck"></div>
+
+        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+        <script>
+            const elems = window.location.href.split('/');
+            const uuid = elems[elems.length - 1];
+            const socket = io();
+
+            socket.emit('ready game', uuid);
+
+            socket.on('update game', game => {
+                renderGame(game.challengers, game.middle, game.deck, game.historic);
+            });
+        </script>
+    </body>
 </html>

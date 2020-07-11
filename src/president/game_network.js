@@ -32,7 +32,7 @@ function updateSocket (game, socket, pseudo) {
 function joinPlayer (socket, uuid, pseudo) {
     let game = games.get(uuid);
     if (game && !updateSocket(game, socket, pseudo)) {
-        game.lobby_players.push([pseudo, socket]);
+        game.lobby_players.push([pseudo, socket, false]);
 
         game.lobby_players.forEach(x => {
             const pseudo_tmp = x[0];
@@ -57,6 +57,26 @@ function startGame (uuid) {
     }
 }
 
+function everyoneReady (game) {
+    return false;
+}
+
+function readyGame (uuid, pseudo) {
+    let game = games.get(uuid);
+    if (game) {
+        for (let i = 0; i<game.lobby_players.length; i++) {
+            if (game.lobby_players[i][0] === pseudo) {
+                game.lobby_players[i][2] = true;
+            }
+        }
+
+        if (everyoneReady(game)) {
+            // initGame();
+            // sendGameInformation();
+        }
+    }
+}
+
 exports.handleEvents = function (io) {
     io.on('connection', socket => {
         console.log('User connected');
@@ -74,6 +94,10 @@ exports.handleEvents = function (io) {
 
         socket.on('start game', uuid => {
             startGame(uuid);
+        });
+
+        socket.on('ready game', obj => {
+            readyGame(obj.uuid, obj.pseudo);
         });
     });
 }
