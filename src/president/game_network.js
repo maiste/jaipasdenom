@@ -1,4 +1,5 @@
 const config = require ('../config');
+const Game = require ('./game.js');
 const games = new Map();
 
 /* Server-side */
@@ -57,6 +58,20 @@ function startGame (uuid) {
     }
 }
 
+function initGame (game) {
+    let players = [];
+    game.lobby_players.forEach(pl => {
+        players.push(pl[0]);
+    });
+    game.game = Game.initGame(game.uuid, players);
+}
+
+function sendGameInformation (game) {
+    game.lobby_players.forEach(player => {
+        //TODO: send info
+    });
+}
+
 function everyoneReady (game) {
     for (let i = 0; i<game.lobby_players.length; i++) {
         if (!game.lobby_players[i][2]) {
@@ -76,8 +91,10 @@ function readyGame (uuid, pseudo) {
         }
 
         if (everyoneReady(game)) {
-            // initGame();
-            // sendGameInformation();
+            console.log('Everyone has joined ' + uuid);
+
+            initGame(game);
+            sendGameInformation(game);
         }
     }
 }

@@ -20,7 +20,10 @@
             const uuid = elems[elems.length - 1];
             const socket = io();
 
-            socket.emit('ready game', uuid);
+            socket.emit('ready game', {
+              uuid: uuid,
+              pseudo: window.sessionStorage.pseudo
+            });
 
             const form = document.getElementById('loading');
             socket.on('update game', game => {
