@@ -35,7 +35,7 @@ function renderHand(hand) {
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "public/images/" + card[1] + ".png";
+        img.src = "/public/images/" + card[1] + ".png";
         card_div.className = "card";
         color_div.className = card[1];
         color_div.appendChild(img);
@@ -86,7 +86,7 @@ function renderMiddle(middle) {
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "public/images/" + card[1] + ".png";
+        img.src = "/public/images/" + card[1] + ".png";
         card_div.className = "card";
         color_div.className = card[1];
         color_div.appendChild(img);
