@@ -58,7 +58,12 @@ function startGame (uuid) {
 }
 
 function everyoneReady (game) {
-    return false;
+    for (let i = 0; i<game.lobby_players.length; i++) {
+        if (!game.lobby_players[i][2]) {
+            return false;
+        }
+    }
+    return true;
 }
 
 function readyGame (uuid, pseudo) {

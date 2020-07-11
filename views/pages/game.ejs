@@ -10,6 +10,10 @@
         <div id="middle"></div>
         <div id="deck"></div>
 
+        <div id="loading" class="center">
+          Waiting for all players to join..
+        </div>
+
         <script src="http://localhost:8080/socket.io/socket.io.js"></script>
         <script>
             const elems = window.location.href.split('/');
@@ -18,7 +22,9 @@
 
             socket.emit('ready game', uuid);
 
+            const form = document.getElementById('loading');
             socket.on('update game', game => {
+                loading.style.display = "none";
                 renderGame(game.challengers, game.middle, game.deck, game.historic);
             });
         </script>
