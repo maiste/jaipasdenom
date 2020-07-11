@@ -12,7 +12,8 @@ exports.initGame = function (id, players) {
         hands: [], //array of players hands
         // TODO: Current player depends on the rule
         current_pl: 0, //index of the current player
-        deck: deck //deck of the game
+        deck: deck, //deck of the game
+        historic: [] //historic of played cards
     }
     cardsModule.mixCards(game.deck);
     
