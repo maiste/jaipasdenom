@@ -79,3 +79,22 @@ exports.playGame = function (game) {
         game.current_pl = (++game.current_pl)%game.players.length;
     }
 }
+
+/*
+ * Get player's hand
+*/
+exports.getPlayerHand = function (game, player) {
+    let index = -1;
+    let tmp = 0;
+    game.players.forEach(pl => {
+        if (pl === player) {
+            index = tmp;
+        }
+        tmp++;
+    });
+
+    if (index > -1) {
+        return game.hands[index];
+    }
+    return [];
+}
