@@ -28,7 +28,25 @@ function click_card() {
 
 function renderHand(hand) {
     document.getElementById("deck").innerHTML = "";
-    hand.sort();
+
+    hand.sort(function (c1, c2) {
+        function cardToInt(card) {
+            switch(card[0]) {
+                case "J":
+                    return 11;
+                case "Q":
+                    return 12;
+                case "K":
+                    return 13
+                case "A":
+                    return 14
+                default:
+                    return parseInt(card);
+            }
+        }
+        return cardToInt(c1) - cardToInt(c2);
+    });
+
     hand.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
