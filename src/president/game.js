@@ -98,3 +98,20 @@ exports.getPlayerHand = function (game, player) {
     }
     return [];
 }
+
+/**
+ * Get player's challengers
+ */
+exports.getPlayerChallengers = function (game, player) {
+    let challengers = [];
+
+    let index = 0;
+    game.players.forEach(pl => {
+        if (pl !== player) {
+            challengers.push([pl, game.hands[index].length]);
+        }
+        index++;
+    })
+
+    return challengers;
+}

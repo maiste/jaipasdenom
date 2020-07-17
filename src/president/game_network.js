@@ -70,7 +70,7 @@ function initGame (game) {
 function sendGameInformation (game) {
     game.lobby_players.forEach(player => {
         //TODO: send info
-        const challengers = [];
+        const challengers = Game.getPlayerChallengers(game.game, player[0]);
         const middle = [];
         const deck = Game.getPlayerHand(game.game, player[0]);
 
