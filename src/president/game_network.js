@@ -112,6 +112,17 @@ function readyGame (uuid, pseudo, socket) {
     }
 }
 
+function playGame (uuid, pseudo, cards, socket) {
+    let game = games.get(uuid);
+    if (game) {
+        if (pseudo === Game.getCurrentPlayer(game)) {
+            // TODO: Check cards, then play
+        } else {
+            // TODO: Warn player
+        }
+    }
+}
+
 exports.handleEvents = function (io) {
     io.on('connection', socket => {
         console.log('User connected');
@@ -133,6 +144,10 @@ exports.handleEvents = function (io) {
 
         socket.on('ready game', obj => {
             readyGame(obj.uuid, obj.pseudo, socket);
+        });
+
+        socket.on('play', obj => {
+            playGame(obj.uuid, obj.pseudo, obj.cards, socket);
         });
     });
 }
