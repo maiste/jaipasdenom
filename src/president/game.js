@@ -123,3 +123,22 @@ exports.getPlayerChallengers = function (game, player) {
 exports.getCurrentPlayer = function (game) {
     return game.players[game.current_pl];
 }
+
+/**
+ * Check if the player's hand has all the cards
+ */
+exports.cardsInHand = function (game, player, cards) {
+    const index = game.players.indexOf(player);
+    if(index < 0) {
+        return;
+    }
+
+    const hand = game.hands[index];
+    for (let i = 0; i < cards.length; i++) {
+        if (!cardsModule.cardInCards(hand, cards[i])) {
+            return false;
+        }
+    }
+
+    return true;
+}
