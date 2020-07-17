@@ -116,3 +116,10 @@ exports.getPlayerChallengers = function (game, player) {
 
     return challengers;
 }
+
+/**
+ * Get current player
+ */
+exports.getCurrentPlayer = function (game) {
+    return game.players[game.current_pl];
+}
