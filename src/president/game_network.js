@@ -116,7 +116,7 @@ function playGame (uuid, pseudo, cards, socket) {
     let game = games.get(uuid);
     if (game) {
         if (pseudo === Game.getCurrentPlayer(game)) {
-            // TODO: Check cards, then play
+            Game.playOneTurn (game, pseudo, cards);
         } else {
             // TODO: Warn player
         }
