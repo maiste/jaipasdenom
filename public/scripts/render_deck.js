@@ -23,7 +23,7 @@ function click_card() {
         selected.add(card);
         this.className = "card selected";
     }
-    console.log(selected);
+    // console.log(selected);
 };
 
 function renderHand(hand) {
@@ -96,8 +96,13 @@ function renderChallengers(ennemies) {
     });
 }
 
-function renderMiddle(middle) {
+function renderMiddle(middle, playF) {
     document.getElementById("middle").innerHTML = "";
+
+    document.getElementById("middle").onclick = function () {
+        playF(selected);
+    };
+
     middle.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
@@ -141,9 +146,9 @@ function renderHistoric(historic) {
     document.getElementById("historic").appendChild(table);
 }
 
-function renderGame(challengers, middle, hand, historic) {
+function renderGame(challengers, middle, hand, historic, playF) {
     renderChallengers(challengers);
-    renderMiddle(middle);
+    renderMiddle(middle, playF);
     renderHand(hand);
     renderHistoric(historic);
 }
