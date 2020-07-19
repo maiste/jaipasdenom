@@ -93,7 +93,7 @@ function validTurn (game, cards) {
 function updateMiddle (game, cards) {
     let tmp = cards.slice();
     tmp.push.apply(tmp, game.middle);
-    middle = tmp;
+    game.middle = tmp;
 }
 
 function closeTurn (game, player) {
@@ -122,19 +122,40 @@ function applyTurn (game, player, cards) {
     if (closeTurn(game, player)) {
         game.turn = null;
         game.middle = [];
-        game.historic.push.apply(game.historic, [player, cards]);
     }
+    game.historic.push.apply(game.historic, [[player, cards]]);
 }
+
+/*
+ * Get player's hand
+*/
+function getPlayerHand (game, player) {
+    let index = -1;
+    let tmp = 0;
+    game.players.forEach(pl => {
+        if (pl === player) {
+            index = tmp;
+        }
+        tmp++;
+    });
+
+    if (index > -1) {
+        return game.hands[index];
+    }
+    return [];
+}
+
+exports.getPlayerHand = getPlayerHand;
 
 /*
  * Allows the current player to play his turn.
  */
 exports.playOneTurn = function (game, player, cards) {
-    const hand = getPlayerHand(game, player);
+    let hand = getPlayerHand(game, player);
     if (cardsInHand(game, hand, cards)) {
         if (validTurn(game, cards)) {
             updateMiddle(game, cards);
-            cardsModule.removeCardFromCards(hand, cards);
+            cardsModule.removeCardsFromCards(hand, cards);
             applyTurn(game, player, cards);
         }
     }
@@ -159,25 +180,6 @@ exports.playGame = function (game) {
         playOneTurn(game);
         // game.current_pl = (++game.current_pl)%game.players.length;
     }
-}
-
-/*
- * Get player's hand
-*/
-exports.getPlayerHand = function (game, player) {
-    let index = -1;
-    let tmp = 0;
-    game.players.forEach(pl => {
-        if (pl === player) {
-            index = tmp;
-        }
-        tmp++;
-    });
-
-    if (index > -1) {
-        return game.hands[index];
-    }
-    return [];
 }
 
 /**
