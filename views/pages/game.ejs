@@ -4,32 +4,40 @@
       <script type="text/javascript" src="/public/scripts/render_deck.js"></script>
     </head>
     <body>
-        <div id="historic"></div>
-        <div id="game">
-        <div id="challengers"></div>
-        <div id="middle"></div>
-        <div id="deck"></div>
+      <div id="historic"></div>
+      <div id="game">
+      <div id="challengers"></div>
+      <div id="middle"></div>
+      <div id="deck"></div>
+      <div id="loading" class="center">
+        Waiting for all players to join..
+      </div>
 
-        <div id="loading" class="center">
-          Waiting for all players to join..
-        </div>
+      <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+      <script>
+          const elems = window.location.href.split('/');
+          const uuid = elems[elems.length - 1];
+          const socket = io();
 
-        <script src="http://localhost:8080/socket.io/socket.io.js"></script>
-        <script>
-            const elems = window.location.href.split('/');
-            const uuid = elems[elems.length - 1];
-            const socket = io();
+          socket.emit('ready game', {
+            uuid: uuid,
+            pseudo: window.sessionStorage.pseudo
+          });
 
-            socket.emit('ready game', {
+          function playCards(selected) {
+            socket.emit('play', {
               uuid: uuid,
-              pseudo: window.sessionStorage.pseudo
+              pseudo: window.sessionStorage.pseudo,
+              cards: Array.from(selected)
             });
+          }
 
-            const form = document.getElementById('loading');
-            socket.on('update game', game => {
-                loading.style.display = "none";
-                renderGame(game.challengers, game.middle, game.deck, game.historic);
-            });
-        </script>
+          const form = document.getElementById('loading');
+          socket.on('update game', game => {
+              loading.style.display = "none";
+              renderGame(game.challengers, game.middle, game.deck, game.historic, playCards);
+          });
+      </script>
+
     </body>
 </html>
