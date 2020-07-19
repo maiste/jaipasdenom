@@ -101,6 +101,9 @@ function renderMiddle(middle, playF) {
 
     document.getElementById("middle").onclick = function () {
         playF(selected);
+        selected.forEach(card => {
+            selected.delete(card);
+        });
     };
 
     middle.forEach(card => {
