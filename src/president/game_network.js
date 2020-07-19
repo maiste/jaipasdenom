@@ -112,11 +112,12 @@ function readyGame (uuid, pseudo, socket) {
     }
 }
 
-function playGame (uuid, pseudo, cards, socket) {
+function playGame (uuid, pseudo, cards) {
     let game = games.get(uuid);
     if (game) {
-        if (pseudo === Game.getCurrentPlayer(game)) {
-            Game.playOneTurn (game, pseudo, cards);
+        if (pseudo === Game.getCurrentPlayer(game.game)) {
+            Game.playOneTurn (game.game, pseudo, cards);
+            sendGameInformation(game);
         } else {
             // TODO: Warn player
         }
@@ -147,7 +148,7 @@ exports.handleEvents = function (io) {
         });
 
         socket.on('play', obj => {
-            playGame(obj.uuid, obj.pseudo, obj.cards, socket);
+            playGame(obj.uuid, obj.pseudo, obj.cards);
         });
     });
 }
