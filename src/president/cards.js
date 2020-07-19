@@ -132,5 +132,5 @@ exports.compare = function (card1, card2) {
             return parseInt(card);
     }
   }
-  return cardToInt(c1) - cardToInt(c2);
+  return cardToInt(card1) - cardToInt(card2);
 }
