@@ -122,13 +122,26 @@ function playerCanPlay (game, player_index) {
         return true;
     }
     const hand = game.hands[player_index].sort(cardsModule.compare);
+    const to_beat = game.middle[0];
 
     if (game.turn === 1) { //specific rule
-        return;
+        if (game.middle.length > 1 && (game.current_pl + 1 == player_index) ||
+        (game.current_pl === game.players.length - 1 && player_index === 0)) {
+            // If the player_index is the next player in the list and the last two cards are identicals:
+            // he must play the same card of his turn is skipped
+            if (cardsModule.compare(game.middle[0], game.middle[1]) === 0) {
+                for (let i = 0; i < hand.length; i++) {
+                    const card = hand[i];
+                    if (cardsModule.compare(card, to_beat) === 0) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 
     let i = 0;
-    const to_beat = game.middle[0];
     while (i + game.turn < hand.length) {
         let b = true;
 
@@ -177,10 +190,12 @@ function nextPlayer (game) {
 }
 
 function applyTurn (game, player, cards) {
-    game.current_pl = nextPlayer(game);
-    if (closeTurn(game)) {
+    const next_player = nextPlayer(game);
+    if (closeTurn(game) || next_player == game.current_pl) {
         game.turn = null;
         game.middle = [];
+    } else {
+        game.current_pl = next_player;
     }
     game.historic.push.apply(game.historic, [[player, cards]]);
 }
