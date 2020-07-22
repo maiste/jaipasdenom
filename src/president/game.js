@@ -96,7 +96,7 @@ function updateMiddle (game, cards) {
     game.middle = tmp;
 }
 
-function closeTurn (game, player) {
+function closeTurn (game) {
     if (game.middle.length > 0 && game.middle[0] == "2") {
         return true;
     }
@@ -114,12 +114,71 @@ function closeTurn (game, player) {
         }
     }
 
-    game.current_pl = (++game.current_pl)%game.players.length;
     return false;
 }
 
+function playerCanPlay (game, player_index) {
+    if (game.middle.length === 0 && game.hands[player].length > 0) {
+        return true;
+    }
+    const hand = game.hands[player_index].sort(cardsModule.compare);
+
+    if (game.turn === 1) { //specific rule
+        return;
+    }
+
+    let i = 0;
+    const to_beat = game.middle[0];
+    while (i + game.turn < hand.length) {
+        let b = true;
+
+        const first_card = hand[i];
+        for (let j = i + 1; (j < i + game.turn) && (j < hand.length - game.turn - 1); j++) {
+            const card = hand[j];
+            if (cardsModule.compare(card, to_beat) < 0 || cardsModule.compare(first_card, card) !== 0) {
+                b = false;
+            }
+        }
+
+        if (b) {
+            return true;
+        }
+        i++;
+    }
+
+    return true;
+}
+
+function firstAvailable (game) {
+    for (let i = game.current_pl + 1; i < game.players.length; i++) {
+        if (playerCanPlay(game, i)) {
+            return i;
+        }
+    }
+    for (let i = 0; i <= game.current_pl; i++) {
+        if (playerCanPlay(game, i)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function nextPlayer (game) {
+    if (closeTurn(game)) {
+        const player_hand = game.hands[game.current_pl];
+        if (player_hand.length === 0) {
+            return firstAvailable(game);
+        } else {
+            return game.current_pl;
+        }
+    } else {
+        return firstAvailable(game);
+    }
+}
+
 function applyTurn (game, player, cards) {
-    if (closeTurn(game, player)) {
+    game.current_pl = nextPlayer(game);
+    if (closeTurn(game)) {
         game.turn = null;
         game.middle = [];
     }
