@@ -153,22 +153,11 @@ function renderHistoric(historic) {
     let table = document.createElement("table");
     let table_body = document.createElement("tbody");
 
-    historic.forEach(turn => {
+    historic.forEach(row => {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
 
-        let acc = turn[0];
-
-        if (turn[1].length > 0) {
-            acc += ": ";
-            turn[1].forEach(card => {
-                acc += card + " ";
-            });
-        } else {
-            acc += " skipped his turn";
-        }
-
-        td.appendChild(document.createTextNode(acc));
+        td.appendChild(document.createTextNode(row));
 
         tr.appendChild(td);
         table_body.appendChild(tr);
