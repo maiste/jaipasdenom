@@ -109,7 +109,6 @@ function closeTurn (game) {
     if (game.middle.length > 0 && cardsModule.compare(game.middle[0], "2d") === 0) {
         return true;
     }
-
     if (game.middle.length >= 4) {
         const card = game.middle[0];
         let ok = true;
@@ -128,12 +127,12 @@ function closeTurn (game) {
 
 function firstWithCards (game, start) {
     for (let i = start + 1; i < game.players.length; i++) {
-        if (game.hands[i].length > 0) {
+        if (game.hands[i].length > 0 && !hasStopped(game, game.players[i])) {
             return i;
         }
     }
     for (let i = 0; i <= start; i++) {
-        if (game.hands[i].length > 0) {
+        if (game.hands[i].length > 0 && !hasStopped(game, game.players[i])) {
             return i;
         }
     }
@@ -162,18 +161,28 @@ function applyTurn (game, player, cards) {
             game.skip = true;
         }
     }
+    if (cards.length > 0) {
+        let acc = player + ":";
+        cards.forEach(card => {
+            acc += " " + card;
+        });
+        game.historic.push(acc);
+    }
+
+    updateMiddle(game, cards);
+
     const next_player = nextPlayer(game);
-    if (closeTurn(game) || game.players[next_player] == game.last_to_play) {
+    if (closeTurn(game) || game.players[next_player] === game.last_to_play) {
         game.turn = null;
         game.middle = [];
         game.current_pl = game.players.indexOf(game.last_to_play);
+        game.historic.push(game.last_to_play + " closed the turn!");
         game.last_to_play = null;
         game.skip = false;
         game.skipped = [];
     } else {
         game.current_pl = next_player;
     }
-    game.historic.push.apply(game.historic, [[player, cards]]);
 }
 
 /*
@@ -197,16 +206,31 @@ function getPlayerHand (game, player) {
 
 exports.getPlayerHand = getPlayerHand;
 
+function hasStopped(game, player) {
+    for (let i = 0; i < game.skipped; i ++) {
+        if (game.skipped[i] === player) {
+            return true;
+        }
+    }
+    return false;
+}
 /*
  * Allows the current player to play his turn.
  */
 exports.playOneTurn = function (game, player, cards) {
+    if (hasStopped(game, player)) {
+        return;
+    }
+
     if (cards.length === 0) {
         if (game.middle.length === 0) {
             return; // can't skip if it's empty
         }
         if (!game.skip) {
+            game.historic.push(player + " stop for this turn!");
             game.skipped.push(player);
+        } else {
+            game.historic.push(player + " is skipped!");
         }
         game.skip = false;
         applyTurn(game, player, cards);
@@ -218,7 +242,6 @@ exports.playOneTurn = function (game, player, cards) {
         if (validTurn(game, cards)) {
             game.last_to_play = player;
             applyTurn(game, player, cards);
-            updateMiddle(game, cards);
             cardsModule.removeCardsFromCards(hand, cards);
         }
     }
