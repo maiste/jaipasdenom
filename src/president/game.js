@@ -243,6 +243,8 @@ exports.playOneTurn = function (game, player, cards) {
             game.last_to_play = player;
             applyTurn(game, player, cards);
             cardsModule.removeCardsFromCards(hand, cards);
+        } else {
+            throw 'not valid turn';
         }
     }
 }

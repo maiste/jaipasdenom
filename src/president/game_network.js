@@ -127,6 +127,9 @@ function handleError (game, exception) {
         case 'has stopped':
             displayMessage(game, "You are not in this turn anymore!");
             return;
+        case 'not valid turn':
+            displayMessage(game, "You can't play this!");
+            return;
         default:
             console.log(exception);
             return;
