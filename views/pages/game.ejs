@@ -34,8 +34,12 @@
 
           const form = document.getElementById('loading');
           socket.on('update game', game => {
-              loading.style.display = "none";
-              renderGame(game.challengers, game.middle, game.deck, game.historic, playCards);
+            loading.style.display = "none";
+            renderGame(game.challengers, game.middle, game.deck, game.historic, playCards);
+          });
+
+          socket.on('game error', msg => {
+            window.alert(msg);
           });
       </script>
 

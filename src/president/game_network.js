@@ -112,15 +112,36 @@ function readyGame (uuid, pseudo, socket) {
     }
 }
 
+function displayMessage(game, msg) {
+    for (let i = 0; i < game.lobby_players.length; i++) {
+        const socket = game.lobby_players[i][1];
+        socket.emit('game error', msg);
+    }
+}
+
+function handleError (game, exception) {
+    switch (exception) {
+        case 'not your turn':
+            displayMessage(game, "This is not your turn!");
+            return;
+        default:
+            console.log("Unknown exception");
+            return;
+    }
+}
 function playGame (uuid, pseudo, cards) {
     let game = games.get(uuid);
-    if (game) {
-        if (pseudo === Game.getCurrentPlayer(game.game)) {
-            Game.playOneTurn (game.game, pseudo, cards);
-            sendGameInformation(game);
-        } else {
-            // TODO: Warn player
+    try {
+        if (game) {
+            if (pseudo === Game.getCurrentPlayer(game.game)) {
+                Game.playOneTurn (game.game, pseudo, cards);
+                sendGameInformation(game);
+            } else {
+                throw 'not your turn';
+            }
         }
+    } catch (e) {
+        handleError(game, e);
     }
 }
 
