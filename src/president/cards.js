@@ -130,6 +130,8 @@ exports.compare = function (card1, card2) {
             return 14
         case "1":
             return 10;
+        case "2":
+            return 15;
         default:
             return parseInt(card);
     }
