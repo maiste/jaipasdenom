@@ -133,15 +133,16 @@ function renderMiddle(middle, playF) {
         }
         card_div.className = "card";
         if (card.length > 2) {
-            color_div.className = card[0] + card[1];
+            color_div.className = card[2];
+            value_div.innerHTML = card[0] + card[1];
         } else {
             color_div.className = card[1];
+            value_div.innerHTML = card[0];
         }
         color_div.appendChild(img);
         
 
         value_div.className = "value";
-        value_div.innerHTML = card[0];
         card_div.appendChild(value_div);
         card_div.appendChild(color_div);
         document.getElementById("middle").appendChild(card_div);
