@@ -16,6 +16,7 @@ exports.initGame = function (id, players) {
         historic: [], //historic of played cards
         middle: [], //current cards on the board
         turn: null, //turn mode: 1/2/3/4 cards
+        skip: false, //indicate if the next player might be skipped
         skipped: [], //players that skipped the current turn
         last_to_play: null //last player to play a card
     }
@@ -75,6 +76,13 @@ function validTurn (game, cards) {
     const length = cards.length;
 
     const first_card = cards[0];
+
+    if (game.skip) {
+        if (cardsModule.compare(first_card, game.middle[0]) !== 0) {
+            return false;
+        }
+    }
+
     for (let i = 1; i < length; i++) {
         if (cardsModule.compare(first_card, cards[i]) !== 0) {
             return false;
@@ -84,8 +92,6 @@ function validTurn (game, cards) {
     if (game.turn) {
         return game.turn === length;
     } else {
-        game.skipped = [];
-        game.turn = length;
         return true;
     }
 }
@@ -100,7 +106,7 @@ function updateMiddle (game, cards) {
 }
 
 function closeTurn (game) {
-    if (game.middle.length > 0 && game.middle[0] == "2") {
+    if (game.middle.length > 0 && cardsModule.compare(game.middle[0], "2d") === 0) {
         return true;
     }
 
@@ -120,76 +126,14 @@ function closeTurn (game) {
     return false;
 }
 
-function playerCanPlay (game, player_index) {
-    for (let i = 0; i < game.skipped; i++) {
-        if (game.skipped[i] === game.players[player_index]) {
-            return false;
-        }
-    }
-
-    if (game.middle.length === 0 && game.hands[player_index].length > 0) {
-        return true;
-    }
-    const hand = game.hands[player_index].sort(cardsModule.compare);
-    const to_beat = game.middle[0];
-
-    if (game.turn === 1) { //specific rule
-        if (game.middle.length > 1 &&
-            ((game.current_pl + 1 == player_index) ||
-            (game.current_pl === game.players.length - 1 && player_index === 0))
-            ) {
-            // If the player_index is the next player in the list and the last two cards are identicals:
-            // he must play the same card of his turn is skipped
-            if (cardsModule.compare(game.middle[0], game.middle[1]) === 0) {
-                for (let i = 0; i < hand.length; i++) {
-                    const card = hand[i];
-                    if (cardsModule.compare(card, to_beat) === 0) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        } else {
-            const to_beat = game.middle[0];
-            for (let i = 0; i < hand.length; i++) {
-                const card = hand[i];
-                if (cardsModule.compare(card, to_beat) >= 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    let i = 0;
-    while (i + game.turn < hand.length) {
-        let b = true;
-
-        const first_card = hand[i];
-        for (let j = i + 1; (j < i + game.turn) && (j < hand.length - game.turn - 1); j++) {
-            const card = hand[j];
-            if (cardsModule.compare(card, to_beat) < 0 || cardsModule.compare(first_card, card) !== 0) {
-                b = false;
-            }
-        }
-
-        if (b) {
-            return true;
-        }
-        i++;
-    }
-
-    return false;
-}
-
-function firstAvailable (game) {
-    for (let i = game.current_pl + 1; i < game.players.length; i++) {
-        if (playerCanPlay(game, i)) {
+function firstWithCards (game, start) {
+    for (let i = start + 1; i < game.players.length; i++) {
+        if (game.hands[i].length > 0) {
             return i;
         }
     }
-    for (let i = 0; i <= game.current_pl; i++) {
-        if (playerCanPlay(game, i)) {
+    for (let i = 0; i <= start; i++) {
+        if (game.hands[i].length > 0) {
             return i;
         }
     }
@@ -200,22 +144,32 @@ function nextPlayer (game) {
     if (closeTurn(game)) {
         const player_hand = game.hands[game.current_pl];
         if (player_hand.length === 0) {
-            return firstAvailable(game);
+            return firstWithCards(game, game.current_pl);
         } else {
             return game.current_pl;
         }
     } else {
-        return firstAvailable(game);
+        return firstWithCards(game, game.current_pl);
     }
 }
 
 function applyTurn (game, player, cards) {
+    if (!game.turn) {
+        game.turn = cards.length;
+    }
+    if (cards.length === 1 && game.middle.length > 0) {
+        if (cardsModule.compare(cards[0], game.middle[0]) === 0) {
+            game.skip = true;
+        }
+    }
     const next_player = nextPlayer(game);
     if (closeTurn(game) || game.players[next_player] == game.last_to_play) {
         game.turn = null;
         game.middle = [];
         game.current_pl = game.players.indexOf(game.last_to_play);
         game.last_to_play = null;
+        game.skip = false;
+        game.skipped = [];
     } else {
         game.current_pl = next_player;
     }
@@ -252,6 +206,7 @@ exports.playOneTurn = function (game, player, cards) {
             return; // can't skip if it's empty
         }
         game.skipped.push(player);
+        game.skip = false;
         applyTurn(game, player, cards);
         return;
     }
@@ -259,10 +214,10 @@ exports.playOneTurn = function (game, player, cards) {
     let hand = getPlayerHand(game, player);
     if (cardsInHand(game, hand, cards)) {
         if (validTurn(game, cards)) {
+            game.last_to_play = player;
+            applyTurn(game, player, cards);
             updateMiddle(game, cards);
             cardsModule.removeCardsFromCards(hand, cards);
-            applyTurn(game, player, cards);
-            game.last_to_play = player;
         }
     }
 }
