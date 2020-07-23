@@ -205,7 +205,9 @@ exports.playOneTurn = function (game, player, cards) {
         if (game.middle.length === 0) {
             return; // can't skip if it's empty
         }
-        game.skipped.push(player);
+        if (!game.skip) {
+            game.skipped.push(player);
+        }
         game.skip = false;
         applyTurn(game, player, cards);
         return;
