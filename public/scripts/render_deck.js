@@ -126,9 +126,17 @@ function renderMiddle(middle, playF) {
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "/public/images/" + card[1] + ".png";
+        if (card.length > 2) {
+            img.src = "/public/images/" + card[2] + ".png";
+        } else {
+            img.src = "/public/images/" + card[1] + ".png";
+        }
         card_div.className = "card";
-        color_div.className = card[1];
+        if (card.length > 2) {
+            color_div.className = card[0] + card[1];
+        } else {
+            color_div.className = card[1];
+        }
         color_div.appendChild(img);
         
 
