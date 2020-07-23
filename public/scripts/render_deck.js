@@ -119,7 +119,8 @@ function renderMiddle(middle, playF) {
         });
     };
 
-    middle.forEach(card => {
+    let tmp = middle.slice().reverse();
+    tmp.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
         let value_div = document.createElement("div");
