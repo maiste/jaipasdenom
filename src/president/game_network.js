@@ -124,6 +124,9 @@ function handleError (game, exception) {
         case 'not your turn':
             displayMessage(game, "This is not your turn!");
             return;
+        case 'has stopped':
+            displayMessage(game, "You are not in this turn anymore!");
+            return;
         default:
             console.log(exception);
             return;

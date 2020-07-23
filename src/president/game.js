@@ -219,7 +219,7 @@ function hasStopped(game, player) {
  */
 exports.playOneTurn = function (game, player, cards) {
     if (hasStopped(game, player)) {
-        return;
+        throw 'has stopped';
     }
 
     if (cards.length === 0) {
