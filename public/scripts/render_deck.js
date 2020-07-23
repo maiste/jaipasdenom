@@ -46,21 +46,30 @@ function renderHand(hand) {
         }
         return cardToInt(c1) - cardToInt(c2);
     });
-
+    // console.log(hand);
     hand.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "/public/images/" + card[1] + ".png";
         card_div.className = "card";
-        color_div.className = card[1];
+        if (card.length > 2) {
+            img.src = "/public/images/" + card[2] + ".png";
+            color_div.className = card[2];
+        } else {
+            img.src = "/public/images/" + card[1] + ".png";
+            color_div.className = card[1];
+        }
         color_div.appendChild(img);
         
 
         value_div.className = "value";
-        value_div.innerHTML = card[0];
+        if (card.length > 2) {
+            value_div.innerHTML = card[0] + card[1];
+        } else { 
+            value_div.innerHTML = card[0];
+        }
         card_div.appendChild(value_div);
         card_div.appendChild(color_div);
         card_div.onclick = click_card;
