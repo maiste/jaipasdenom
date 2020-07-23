@@ -135,10 +135,17 @@ function renderHistoric(historic) {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
 
-        let acc = turn[0] + ": ";
-        turn[1].forEach(card => {
-            acc += card + " ";
-        });
+        let acc = turn[0];
+
+        if (turn[1].length > 0) {
+            acc += ": ";
+            turn[1].forEach(card => {
+                acc += card + " ";
+            });
+        } else {
+            acc += " skipped his turn";
+        }
+
         td.appendChild(document.createTextNode(acc));
 
         tr.appendChild(td);
