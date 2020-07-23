@@ -77,7 +77,8 @@ function sendGameInformation (game) {
             challengers: challengers,
             middle: middle,
             deck: deck,
-            historic: game.game.historic
+            historic: game.game.historic,
+            current_pl: game.game.players[game.game.current_pl]
         };
 
         player[1].emit('update game', obj);

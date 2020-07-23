@@ -83,7 +83,7 @@ function renderHand(hand) {
 }
 
 
-function renderChallengers(ennemies) {
+function renderChallengers(ennemies, current_pl) {
     document.getElementById("challengers").innerHTML = "";
     ennemies.forEach(ennemy =>{
         let pseudo = ennemy[0];
@@ -96,6 +96,9 @@ function renderChallengers(ennemies) {
         
         challenger_div.className = "challenger";
         back_div.className = "back";
+        if (pseudo === current_pl) {
+            back_div.className = "selected";
+        }
         name_div.className = "name";
 
         name_div.innerHTML = pseudo;
@@ -168,8 +171,8 @@ function renderHistoric(historic) {
     document.getElementById("historic").appendChild(table);
 }
 
-function renderGame(challengers, middle, hand, historic, playF) {
-    renderChallengers(challengers);
+function renderGame(challengers, middle, hand, historic, playF, current_pl) {
+    renderChallengers(challengers, current_pl);
     renderMiddle(middle, playF);
     renderHand(hand);
     renderHistoric(historic);

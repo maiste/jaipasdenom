@@ -35,7 +35,7 @@
           const form = document.getElementById('loading');
           socket.on('update game', game => {
             loading.style.display = "none";
-            renderGame(game.challengers, game.middle, game.deck, game.historic, playCards);
+            renderGame(game.challengers, game.middle, game.deck, game.historic, playCards, game.current_pl);
           });
 
           socket.on('game error', msg => {
