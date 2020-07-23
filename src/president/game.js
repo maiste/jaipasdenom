@@ -17,7 +17,7 @@ exports.initGame = function (id, players) {
         middle: [], //current cards on the board
         turn: null, //turn mode: 1/2/3/4 cards
         skip: false, //indicate if the next player might be skipped
-        skipped: [], //players that skipped the current turn
+        stopped: [], //players that skipped the current turn
         last_to_play: null //last player to play a card
     }
     cardsModule.mixCards(game.deck);
@@ -127,12 +127,12 @@ function closeTurn (game) {
 
 function firstWithCards (game, start) {
     for (let i = start + 1; i < game.players.length; i++) {
-        if (game.hands[i].length > 0 && !hasStopped(game, game.players[i])) {
+        if (!hasStopped(game, game.players[i])) {
             return i;
         }
     }
     for (let i = 0; i <= start; i++) {
-        if (game.hands[i].length > 0 && !hasStopped(game, game.players[i])) {
+        if (!hasStopped(game, game.players[i])) {
             return i;
         }
     }
@@ -141,11 +141,12 @@ function firstWithCards (game, start) {
 
 function nextPlayer (game) {
     if (closeTurn(game)) {
-        const player_hand = game.hands[game.current_pl];
+        const ind = game.players.indexOf(game.last_to_play);
+        const player_hand = game.hands[ind];
         if (player_hand.length === 0) {
-            return firstWithCards(game, game.current_pl);
+            return firstWithCards(game, ind);
         } else {
-            return game.current_pl;
+            return game.last_to_play;
         }
     } else {
         return firstWithCards(game, game.current_pl);
@@ -170,16 +171,24 @@ function applyTurn (game, player, cards) {
     }
 
     updateMiddle(game, cards);
+    if (game.hands[game.players.indexOf(game.last_to_play)].length - cards.length === 0) {
+        game.stopped.push(game.last_to_play);
+    }
 
     const next_player = nextPlayer(game);
     if (closeTurn(game) || game.players[next_player] === game.last_to_play) {
         game.turn = null;
         game.middle = [];
-        game.current_pl = game.players.indexOf(game.last_to_play);
+        game.current_pl = next_player;
         game.historic.push(game.last_to_play + " closed the turn!");
         game.last_to_play = null;
         game.skip = false;
-        game.skipped = [];
+        game.stopped = [];
+        for (let i = 0; i < game.hands.length; i++) {
+            if (game.hands[i].length === 0) {
+                game.stopped.push(game.players[i]);
+            }
+        }
     } else {
         game.current_pl = next_player;
     }
@@ -207,8 +216,8 @@ function getPlayerHand (game, player) {
 exports.getPlayerHand = getPlayerHand;
 
 function hasStopped(game, player) {
-    for (let i = 0; i < game.skipped; i ++) {
-        if (game.skipped[i] === player) {
+    for (let i = 0; i < game.stopped.length; i ++) {
+        if (game.stopped[i] === player) {
             return true;
         }
     }
@@ -228,7 +237,7 @@ exports.playOneTurn = function (game, player, cards) {
         }
         if (!game.skip) {
             game.historic.push(player + " stop for this turn!");
-            game.skipped.push(player);
+            game.stopped.push(player);
         } else {
             game.historic.push(player + " is skipped!");
         }
