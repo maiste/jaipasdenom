@@ -126,7 +126,6 @@ function playGame (uuid, pseudo, cards) {
 
 exports.handleEvents = function (io) {
     io.on('connection', socket => {
-        console.log('User connected');
 
         socket.on('fetch players', uuid => {
             givePlayers(socket, uuid);
