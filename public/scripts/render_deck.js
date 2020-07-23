@@ -32,21 +32,25 @@ function renderHand(hand) {
     hand.sort(function (c1, c2) {
         function cardToInt(card) {
             switch(card[0]) {
+                case "1":
+                    return 10;
                 case "J":
                     return 11;
                 case "Q":
                     return 12;
                 case "K":
-                    return 13
+                    return 13;
                 case "A":
-                    return 14
+                    return 14;
+                case "2":
+                    return 15;
                 default:
                     return parseInt(card);
             }
         }
         return cardToInt(c1) - cardToInt(c2);
     });
-    // console.log(hand);
+
     hand.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
