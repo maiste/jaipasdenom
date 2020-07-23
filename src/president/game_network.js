@@ -125,7 +125,7 @@ function handleError (game, exception) {
             displayMessage(game, "This is not your turn!");
             return;
         default:
-            console.log("Unknown exception");
+            console.log(exception);
             return;
     }
 }
