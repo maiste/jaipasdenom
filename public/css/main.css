@@ -153,6 +153,26 @@ body {
     font-family: rgb(252, 247, 228);
 }
 
+.challenger .selected {
+    width: 100%;
+    min-height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 25px;
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    background-color: #288383;
+    color: cornsilk;
+    font-size: 30pt;
+    font-family: rgb(252, 247, 228);
+
+    border: 8px solid red;
+}
+
 /** MIDDLE **/
 #middle {
     height: 25%;

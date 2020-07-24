@@ -23,26 +23,57 @@ function click_card() {
         selected.add(card);
         this.className = "card selected";
     }
-    console.log(selected);
+    // console.log(selected);
 };
 
 function renderHand(hand) {
     document.getElementById("deck").innerHTML = "";
-    hand.sort();
+
+    hand.sort(function (c1, c2) {
+        function cardToInt(card) {
+            switch(card[0]) {
+                case "1":
+                    return 10;
+                case "J":
+                    return 11;
+                case "Q":
+                    return 12;
+                case "K":
+                    return 13;
+                case "A":
+                    return 14;
+                case "2":
+                    return 15;
+                default:
+                    return parseInt(card);
+            }
+        }
+        return cardToInt(c1) - cardToInt(c2);
+    });
+
     hand.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "public/images/" + card[1] + ".png";
         card_div.className = "card";
-        color_div.className = card[1];
+        if (card.length > 2) {
+            img.src = "/public/images/" + card[2] + ".png";
+            color_div.className = card[2];
+        } else {
+            img.src = "/public/images/" + card[1] + ".png";
+            color_div.className = card[1];
+        }
         color_div.appendChild(img);
         
 
         value_div.className = "value";
-        value_div.innerHTML = card[0];
+        if (card.length > 2) {
+            value_div.innerHTML = card[0] + card[1];
+        } else { 
+            value_div.innerHTML = card[0];
+        }
         card_div.appendChild(value_div);
         card_div.appendChild(color_div);
         card_div.onclick = click_card;
@@ -52,7 +83,7 @@ function renderHand(hand) {
 }
 
 
-function renderChallengers(ennemies) {
+function renderChallengers(ennemies, current_pl) {
     document.getElementById("challengers").innerHTML = "";
     ennemies.forEach(ennemy =>{
         let pseudo = ennemy[0];
@@ -65,6 +96,9 @@ function renderChallengers(ennemies) {
         
         challenger_div.className = "challenger";
         back_div.className = "back";
+        if (pseudo === current_pl) {
+            back_div.className = "selected";
+        }
         name_div.className = "name";
 
         name_div.innerHTML = pseudo;
@@ -78,22 +112,40 @@ function renderChallengers(ennemies) {
     });
 }
 
-function renderMiddle(middle) {
+function renderMiddle(middle, playF) {
     document.getElementById("middle").innerHTML = "";
-    middle.forEach(card => {
+
+    document.getElementById("middle").onclick = function () {
+        playF(selected);
+        selected.forEach(card => {
+            selected.delete(card);
+        });
+    };
+
+    let tmp = middle.slice().reverse();
+    tmp.forEach(card => {
         let card_div = document.createElement("div");
         let color_div = document.createElement("div");
         let value_div = document.createElement("div");
         let img = document.createElement("img");
 
-        img.src = "public/images/" + card[1] + ".png";
+        if (card.length > 2) {
+            img.src = "/public/images/" + card[2] + ".png";
+        } else {
+            img.src = "/public/images/" + card[1] + ".png";
+        }
         card_div.className = "card";
-        color_div.className = card[1];
+        if (card.length > 2) {
+            color_div.className = card[2];
+            value_div.innerHTML = card[0] + card[1];
+        } else {
+            color_div.className = card[1];
+            value_div.innerHTML = card[0];
+        }
         color_div.appendChild(img);
         
 
         value_div.className = "value";
-        value_div.innerHTML = card[0];
         card_div.appendChild(value_div);
         card_div.appendChild(color_div);
         document.getElementById("middle").appendChild(card_div);
@@ -105,15 +157,11 @@ function renderHistoric(historic) {
     let table = document.createElement("table");
     let table_body = document.createElement("tbody");
 
-    historic.forEach(turn => {
+    historic.forEach(row => {
         let tr = document.createElement('tr');
         let td = document.createElement('td');
 
-        let acc = turn[0] + ": ";
-        turn[1].forEach(card => {
-            acc += card + " ";
-        });
-        td.appendChild(document.createTextNode(acc));
+        td.appendChild(document.createTextNode(row));
 
         tr.appendChild(td);
         table_body.appendChild(tr);
@@ -123,9 +171,9 @@ function renderHistoric(historic) {
     document.getElementById("historic").appendChild(table);
 }
 
-function renderGame(challengers, middle, hand, historic) {
-    renderChallengers(challengers);
-    renderMiddle(middle);
+function renderGame(challengers, middle, hand, historic, playF, current_pl) {
+    renderChallengers(challengers, current_pl);
+    renderMiddle(middle, playF);
     renderHand(hand);
     renderHistoric(historic);
 }

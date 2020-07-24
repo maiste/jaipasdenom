@@ -116,3 +116,25 @@ exports.cardsToList = function (cards) {
 exports.cardInCards = function (cards, card) {
     return cards.includes(card);
 }
+
+exports.compare = function (card1, card2) {
+  function cardToInt(card) {
+    switch(card[0]) {
+        case "J":
+            return 11;
+        case "Q":
+            return 12;
+        case "K":
+            return 13
+        case "A":
+            return 14
+        case "1":
+            return 10;
+        case "2":
+            return 15;
+        default:
+            return parseInt(card);
+    }
+  }
+  return cardToInt(card1) - cardToInt(card2);
+}
