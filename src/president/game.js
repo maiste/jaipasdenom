@@ -143,10 +143,10 @@ function nextPlayer (game) {
     if (closeTurn(game)) {
         const ind = game.players.indexOf(game.last_to_play);
         const player_hand = game.hands[ind];
-        if (player_hand.length === 0) {
+        if (hasStopped(game, game.last_to_play)) {
             return firstWithCards(game, ind);
         } else {
-            return game.last_to_play;
+            return ind;
         }
     } else {
         return firstWithCards(game, game.current_pl);
@@ -176,6 +176,7 @@ function applyTurn (game, player, cards) {
     }
 
     const next_player = nextPlayer(game);
+    console.log(next_player);
     if (closeTurn(game) || game.players[next_player] === game.last_to_play) {
         game.turn = null;
         game.middle = [];
