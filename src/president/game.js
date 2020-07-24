@@ -176,7 +176,6 @@ function applyTurn (game, player, cards) {
     }
 
     const next_player = nextPlayer(game);
-    console.log(next_player);
     if (closeTurn(game) || game.players[next_player] === game.last_to_play) {
         game.turn = null;
         game.middle = [];
